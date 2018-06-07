@@ -2,6 +2,7 @@ from flask_restful import Resource, request
 from daos.mongo_connection_factory import MongoConnectionFactory
 from daos.user_dao import UserDao
 from commons.encrypt_helper import EncryptHelper
+from pymongo.errors import DuplicateKeyError
 
 
 class User(Resource):
@@ -28,6 +29,10 @@ class User(Resource):
             user_dao.save(user)
 
             return '', 201
+
+        except DuplicateKeyError:
+
+            return 'Nome de usuario encontra-se em uso', 422
 
         except:
 
